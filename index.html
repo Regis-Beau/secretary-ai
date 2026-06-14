@@ -15,33 +15,26 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f1f5f9;color:#1e293b;min-height:100vh;overscroll-behavior:none}
 
-/* HEADER */
 .hdr{background:#1d4ed8;color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2)}
 .hdr h1{font-size:19px;font-weight:700;display:flex;align-items:center;gap:8px}
 .hdr-btn{background:rgba(255,255,255,.15);border:none;color:#fff;cursor:pointer;padding:8px 12px;border-radius:8px;font-size:13px;font-weight:600}
 
-/* TABS */
 .tabs{display:flex;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:52px;z-index:99}
 .tab{flex:1;padding:13px 8px;text-align:center;cursor:pointer;font-size:13px;font-weight:600;color:#64748b;border-bottom:2px solid transparent;transition:.2s}
 .tab.on{color:#1d4ed8;border-bottom-color:#1d4ed8}
 
-/* CONTENT */
 .page{padding:16px;max-width:560px;margin:0 auto;display:none}
 .page.on{display:block}
 
-/* CARD */
 .card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:14px}
 
-/* MEETING NAME */
 .meeting-input{width:100%;padding:13px 15px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:16px;outline:none;margin-bottom:16px}
 .meeting-input:focus{border-color:#1d4ed8}
 
-/* LANG SELECTOR */
 .langs{display:flex;gap:8px;justify-content:center;margin-bottom:22px}
 .lang{padding:9px 18px;border:2px solid #e2e8f0;border-radius:20px;background:#fff;cursor:pointer;font-size:14px;font-weight:600;color:#64748b;transition:.2s}
 .lang.on{border-color:#1d4ed8;background:#eff6ff;color:#1d4ed8}
 
-/* RECORD BUTTON */
 .rec-wrap{text-align:center;margin-bottom:16px}
 .rec-btn{width:96px;height:96px;border-radius:50%;border:none;cursor:pointer;font-size:34px;transition:.3s;box-shadow:0 4px 18px rgba(0,0,0,.15);display:inline-flex;align-items:center;justify-content:center}
 .rec-btn.idle{background:linear-gradient(135deg,#ef4444,#dc2626)}
@@ -51,28 +44,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .rec-status{font-size:13px;color:#64748b;margin-top:8px}
 .rec-timer{font-size:26px;font-weight:700;color:#1d4ed8;font-variant-numeric:tabular-nums;margin-top:4px;display:none}
 
-/* IMPORT BTN */
 .import-btn{width:100%;padding:12px;border:2px dashed #cbd5e1;border-radius:11px;background:#f8fafc;color:#64748b;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;transition:.2s}
 .import-btn:hover{border-color:#1d4ed8;color:#1d4ed8;background:#eff6ff}
 
-/* TRANSCRIPT */
-.transcript-box{font-size:14px;line-height:1.7;color:#1e293b;min-height:80px;max-height:200px;overflow-y:auto;white-space:pre-wrap}
-.interim{color:#94a3b8;font-style:italic}
+/* Notes pendant l'enregistrement */
+.notes-area{width:100%;padding:12px;border:1.5px solid #fde68a;border-radius:10px;font-size:14px;line-height:1.7;min-height:130px;resize:vertical;outline:none;font-family:inherit;background:#fffbeb}
+.notes-area:focus{border-color:#f97316}
+.notes-hint{font-size:12px;color:#92400e;margin-top:7px;line-height:1.55;background:#fef3c7;padding:8px 10px;border-radius:8px}
+
+.rec-dot{display:inline-block;width:9px;height:9px;background:#ef4444;border-radius:50%;margin-right:5px;animation:blink 1.2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
 .section-title{font-size:12px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
 
-/* LOADING */
-.loading{display:none;align-items:center;gap:10px;color:#64748b;font-size:14px;margin:12px 0;padding:14px;background:#fff;border-radius:12px}
+.transcript-box{font-size:14px;line-height:1.7;color:#1e293b;min-height:80px;max-height:200px;overflow-y:auto;white-space:pre-wrap}
+
+.loading{display:none;align-items:center;gap:10px;color:#64748b;font-size:14px;margin:12px 0;padding:14px;background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .loading.on{display:flex}
 .spinner{width:20px;height:20px;border:2px solid #e2e8f0;border-top-color:#1d4ed8;border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* SUMMARY */
 .summary-text{font-size:15px;line-height:1.75;color:#374151;white-space:pre-wrap}
 .action-item{display:flex;align-items:flex-start;gap:11px;padding:11px 13px;background:#f0fdf4;border-radius:9px;margin-bottom:8px;border-left:3px solid #22c55e}
 .action-num{background:#22c55e;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
 .action-text{font-size:14px;color:#166534;line-height:1.5}
 
-/* EXPORT ROW */
 .export-row{display:flex;gap:9px;margin-top:14px}
 .exp-btn{flex:1;padding:12px 6px;border:none;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
 .exp-word{background:#1d4ed8;color:#fff}
@@ -82,7 +78,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .exp-mail{background:#0ea5e9;color:#fff}
 .exp-mail:hover{background:#0284c7}
 
-/* HISTORY */
 .mtg-item{background:#fff;border-radius:12px;padding:15px;margin-bottom:9px;box-shadow:0 1px 3px rgba(0,0,0,.08);display:flex;align-items:center;justify-content:space-between;cursor:pointer}
 .mtg-item:active{transform:scale(.98)}
 .mtg-info h4{font-size:15px;font-weight:600;margin-bottom:3px}
@@ -91,33 +86,32 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .empty{text-align:center;padding:48px 20px;color:#94a3b8}
 .empty .em{font-size:44px;margin-bottom:10px}
 
-/* SETTINGS MODAL */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:flex-end}
 .modal-bg.on{display:flex}
-.modal{background:#fff;border-radius:20px 20px 0 0;padding:24px;width:100%;max-height:85vh;overflow-y:auto}
-.modal h2{font-size:17px;font-weight:700;margin-bottom:18px}
+.modal{background:#fff;border-radius:20px 20px 0 0;padding:24px;width:100%;max-height:90vh;overflow-y:auto}
+.modal h2{font-size:17px;font-weight:700;margin-bottom:4px}
+.modal-sub{font-size:13px;color:#64748b;margin-bottom:20px}
 .s-group{margin-bottom:18px}
 .s-label{font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;display:block}
+.s-badge{display:inline-block;background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;text-transform:none;letter-spacing:0;vertical-align:middle;margin-left:5px}
 .s-input{width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:15px;outline:none}
 .s-input:focus{border-color:#1d4ed8}
 .s-hint{font-size:12px;color:#94a3b8;margin-top:5px;line-height:1.55}
 .s-save{background:#1d4ed8;color:#fff;border:none;border-radius:10px;padding:14px;width:100%;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:8px}
 .s-close{background:#f1f5f9;border:none;border-radius:10px;padding:13px;width:100%;font-size:15px;cursor:pointer}
 
-/* TOAST */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:11px 18px;border-radius:10px;font-size:14px;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
 .toast.on{opacity:1}
 
 .hidden{display:none!important}
 
-/* ALERT OFFLINE */
 .offline-bar{background:#fef3c7;border-bottom:1px solid #fde68a;padding:8px 16px;font-size:13px;color:#92400e;text-align:center;display:none}
 .offline-bar.on{display:block}
 </style>
 </head>
 <body>
 
-<div class="offline-bar" id="offlineBar">📡 Hors ligne — L'enregistrement fonctionne, la transcription reprendra dès que tu seras connecté.</div>
+<div class="offline-bar" id="offlineBar">📡 Hors ligne — L'enregistrement fonctionne. La transcription sera faite à la reconnexion.</div>
 
 <div class="hdr">
   <h1>🎙️ Secrétaire IA</h1>
@@ -129,16 +123,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   <div class="tab" id="tab-hist" onclick="showTab('hist')">📁 Historique</div>
 </div>
 
-<!-- PAGE ENREGISTREMENT -->
 <div class="page on" id="page-rec">
 
   <div class="card">
     <input class="meeting-input" id="meetingName" type="text" placeholder="Nom de la réunion (ex : Client Dupont)" />
 
     <div class="langs">
-      <button class="lang on" data-lang="fr-FR" onclick="pickLang(this)">🇫🇷 FR</button>
-      <button class="lang" data-lang="en-US" onclick="pickLang(this)">🇬🇧 EN</button>
-      <button class="lang" data-lang="it-IT" onclick="pickLang(this)">🇮🇹 IT</button>
+      <button class="lang on" data-lang="fr" onclick="pickLang(this)">🇫🇷 FR</button>
+      <button class="lang" data-lang="en" onclick="pickLang(this)">🇬🇧 EN</button>
+      <button class="lang" data-lang="it" onclick="pickLang(this)">🇮🇹 IT</button>
     </div>
 
     <div class="rec-wrap">
@@ -153,8 +146,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <input type="file" id="fileIn" accept="audio/*" style="display:none" onchange="onImport(event)">
   </div>
 
+  <!-- Notes pendant l'enregistrement -->
+  <div class="card hidden" id="notesCard">
+    <div class="section-title"><span class="rec-dot"></span>Audio enregistré en silence</div>
+    <textarea class="notes-area" id="notesBox"
+      placeholder="Prends des notes rapides…&#10;&#10;• Points importants&#10;• Décisions&#10;• Actions à faire"></textarea>
+    <div class="notes-hint">
+      🔇 <strong>Aucun bip.</strong> L'audio est capturé silencieusement.
+      Après l'arrêt, la transcription automatique sera générée.
+    </div>
+  </div>
+
+  <!-- Transcription après arrêt -->
   <div class="card hidden" id="transcriptCard">
-    <div class="section-title">Transcription en direct</div>
+    <div class="section-title">Transcription</div>
     <div class="transcript-box" id="transcriptBox"></div>
   </div>
 
@@ -181,7 +186,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
 </div>
 
-<!-- PAGE HISTORIQUE -->
 <div class="page" id="page-hist">
   <div id="histList"></div>
 </div>
@@ -190,19 +194,37 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="modal-bg" id="settingsModal" onclick="bgClose(event)">
   <div class="modal">
     <h2>⚙️ Paramètres</h2>
+    <p class="modal-sub">Configure tes clés API pour la transcription et les résumés IA.</p>
 
     <div class="s-group">
-      <label class="s-label">Ton prénom (pour les comptes-rendus)</label>
+      <label class="s-label">Ton prénom</label>
       <input class="s-input" id="cfgName" type="text" placeholder="Ex : Régis" />
+      <p class="s-hint">Apparaît dans les comptes-rendus.</p>
     </div>
 
     <div class="s-group">
-      <label class="s-label">Clé API Mistral <span style="font-weight:400;text-transform:none">(résumés IA)</span></label>
+      <label class="s-label">
+        Clé API Groq
+        <span class="s-badge">GRATUIT</span>
+      </label>
+      <input class="s-input" id="cfgGroq" type="password" placeholder="gsk_..." autocomplete="off" />
+      <p class="s-hint">
+        Transcription automatique de l'audio (FR / EN / IT) — technologie Whisper.<br>
+        ➜ Inscription gratuite sur <strong>console.groq.com</strong><br>
+        → <em>API Keys</em> → <em>Create API Key</em> → copie la clé ici.
+      </p>
+    </div>
+
+    <div class="s-group">
+      <label class="s-label">
+        Clé API Mistral
+        <span class="s-badge">GRATUIT</span>
+      </label>
       <input class="s-input" id="cfgKey" type="password" placeholder="sk-..." autocomplete="off" />
       <p class="s-hint">
-        Sans clé : résumé automatique basique.<br>
-        Avec clé Mistral : résumé IA de qualité professionnelle.<br>
-        ➜ Gratuit sur <strong>console.mistral.ai</strong> → <em>API keys</em> → <em>Create key</em>
+        Résumés professionnels et plan d'action.<br>
+        ➜ Inscription gratuite sur <strong>console.mistral.ai</strong><br>
+        → <em>API keys</em> → <em>Create key</em> → copie la clé ici.
       </p>
     </div>
 
@@ -214,191 +236,192 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── ÉTAT ─────────────────────────────────
 const S = {
   recording: false,
-  transcript: '',
-  lang: 'fr-FR',
-  recognition: null,
+  lang: 'fr',
   mediaRecorder: null,
   chunks: [],
   startTs: 0,
   timerID: null,
   meetings: [],
-  current: null
+  current: null,
+  audioBlob: null
 };
 
-// ─── INIT ─────────────────────────────────
 function init() {
   S.meetings = JSON.parse(localStorage.getItem('meetings') || '[]');
   document.getElementById('cfgName').value = localStorage.getItem('cfgName') || '';
-  document.getElementById('cfgKey').value = localStorage.getItem('cfgKey') || '';
+  document.getElementById('cfgKey').value  = localStorage.getItem('cfgKey')  || '';
+  document.getElementById('cfgGroq').value = localStorage.getItem('cfgGroq') || '';
   renderHist();
-
   window.addEventListener('online',  () => document.getElementById('offlineBar').classList.remove('on'));
   window.addEventListener('offline', () => document.getElementById('offlineBar').classList.add('on'));
   if (!navigator.onLine) document.getElementById('offlineBar').classList.add('on');
 }
 
-// ─── TABS ─────────────────────────────────
 function showTab(id) {
   ['rec','hist'].forEach(t => {
-    document.getElementById('tab-'+t).classList.toggle('on', t === id);
-    document.getElementById('page-'+t).classList.toggle('on', t === id);
+    document.getElementById('tab-'+t).classList.toggle('on', t===id);
+    document.getElementById('page-'+t).classList.toggle('on', t===id);
   });
-  if (id === 'hist') renderHist();
+  if (id==='hist') renderHist();
 }
 
-// ─── LANGUE ───────────────────────────────
 function pickLang(btn) {
   document.querySelectorAll('.lang').forEach(b => b.classList.remove('on'));
   btn.classList.add('on');
   S.lang = btn.dataset.lang;
 }
 
-// ─── ENREGISTREMENT ───────────────────────
 async function toggleRec() {
   S.recording ? stopRec() : await startRec();
 }
 
 async function startRec() {
-  S.transcript = '';
   S.chunks = [];
+  S.audioBlob = null;
 
   setBtn('go', '⏹️', 'Enregistrement en cours… (appuie pour arrêter)');
   document.getElementById('recTimer').style.display = 'block';
-  document.getElementById('transcriptCard').classList.remove('hidden');
-  document.getElementById('transcriptBox').innerHTML = '';
+  document.getElementById('notesCard').classList.remove('hidden');
+  document.getElementById('notesBox').value = '';
+  document.getElementById('transcriptCard').classList.add('hidden');
   document.getElementById('summaryWrap').classList.add('hidden');
   document.getElementById('loadingDiv').classList.remove('on');
 
-  // Timer
-  S.startTs = Date.now();
-  S.timerID = setInterval(tickTimer, 1000);
-
-  // Reconnaissance vocale
-  startASR();
-
-  // Enregistrement audio (sauvegarde locale)
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    S.mediaRecorder = new MediaRecorder(stream, { mimeType: MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4' });
+    const mimeType = ['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg']
+      .find(t => MediaRecorder.isTypeSupported(t)) || '';
+    S.mediaRecorder = new MediaRecorder(stream, mimeType ? { mimeType } : {});
     S.mediaRecorder.ondataavailable = e => { if (e.data.size > 0) S.chunks.push(e.data); };
     S.mediaRecorder.start(1000);
   } catch(e) {
     toast('Micro non autorisé — Active-le dans Chrome');
-    stopRec(); return;
+    setBtn('idle', '🎙️', 'Appuie pour démarrer');
+    document.getElementById('recTimer').style.display = 'none';
+    document.getElementById('notesCard').classList.add('hidden');
+    return;
   }
 
   S.recording = true;
+  S.startTs = Date.now();
+  S.timerID = setInterval(tickTimer, 1000);
+  document.getElementById('notesBox').focus();
 }
 
 function stopRec() {
   S.recording = false;
   clearInterval(S.timerID);
+  setBtn('idle', '🎙️', 'Appuie pour démarrer');
+  document.getElementById('notesCard').classList.add('hidden');
 
-  if (S.recognition) { try { S.recognition.stop(); } catch(e){} }
   if (S.mediaRecorder && S.mediaRecorder.state !== 'inactive') {
+    S.mediaRecorder.onstop = () => {
+      S.audioBlob = new Blob(S.chunks, { type: S.mediaRecorder.mimeType || 'audio/webm' });
+      processAfterRec();
+    };
     S.mediaRecorder.stop();
     S.mediaRecorder.stream.getTracks().forEach(t => t.stop());
-  }
-
-  setBtn('idle', '🎙️', 'Appuie pour démarrer');
-
-  if (S.transcript.trim().length > 20) {
-    genSummary(S.transcript);
   } else {
-    toast('Transcription trop courte. Vérifie le micro.');
+    processAfterRec();
   }
 }
 
-function startASR() {
-  const ASR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!ASR) {
-    document.getElementById('transcriptBox').textContent = '⚠️ Transcription en direct non disponible sur ce navigateur. Utilise Chrome. L\'audio sera sauvegardé.';
+function processAfterRec() {
+  const notes    = (document.getElementById('notesBox').value || '').trim();
+  const groqKey  = localStorage.getItem('cfgGroq') || '';
+  const hasAudio = S.audioBlob && S.audioBlob.size > 2000;
+
+  if (groqKey.length > 10 && hasAudio) {
+    transcribeAndSummarize(S.audioBlob, notes);
+  } else if (notes.length > 10) {
+    genSummary(notes, notes);
+  } else {
+    // Montrer la zone de notes pour permettre la saisie manuelle
+    document.getElementById('notesCard').classList.remove('hidden');
+    document.getElementById('notesBox').placeholder = 'Enregistrement terminé. Tape un résumé de ce qui s\'est dit, puis appuie sur le bouton ci-dessous.';
+    const btn = document.createElement('button');
+    btn.textContent = '✅ Générer le résumé à partir de mes notes';
+    btn.style.cssText = 'margin-top:10px;padding:13px;background:#1d4ed8;color:#fff;border:none;border-radius:9px;cursor:pointer;font-size:14px;width:100%;font-weight:600';
+    btn.onclick = () => {
+      const t = (document.getElementById('notesBox').value || '').trim();
+      if (!t) { toast('Écris quelques notes d\'abord'); return; }
+      document.getElementById('notesCard').classList.add('hidden');
+      genSummary(t, t);
+    };
+    document.getElementById('notesCard').appendChild(btn);
+    toast('Configure une clé Groq pour la transcription auto');
+  }
+}
+
+async function transcribeAndSummarize(audioBlob, notes) {
+  document.getElementById('loadingDiv').classList.add('on');
+  document.getElementById('loadingTxt').textContent = '🎧 Transcription de l\'audio…';
+  document.getElementById('summaryWrap').classList.add('hidden');
+
+  const groqKey = localStorage.getItem('cfgGroq') || '';
+  let transcript = '';
+
+  try {
+    const ext = audioBlob.type.includes('mp4') ? 'mp4'
+              : audioBlob.type.includes('ogg')  ? 'ogg' : 'webm';
+    const fd = new FormData();
+    fd.append('file', audioBlob, 'recording.' + ext);
+    fd.append('model', 'whisper-large-v3-turbo');
+    fd.append('language', S.lang);
+    fd.append('response_format', 'text');
+
+    const r = await fetch('https://api.groq.com/openai/v1/audio/transcriptions', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + groqKey },
+      body: fd
+    });
+
+    if (!r.ok) {
+      const err = await r.text().catch(()=>'');
+      throw new Error('HTTP ' + r.status + ' ' + err);
+    }
+    transcript = (await r.text()).trim();
+  } catch(e) {
+    console.error('Groq transcription:', e);
+    toast('Erreur transcription — notes utilisées');
+    transcript = notes;
+  }
+
+  if (transcript) {
+    document.getElementById('transcriptCard').classList.remove('hidden');
+    document.getElementById('transcriptBox').textContent = transcript;
+  }
+
+  const fullText = transcript + (notes && notes !== transcript ? '\n\nNotes : ' + notes : '');
+  if (fullText.trim().length < 10) {
+    document.getElementById('loadingDiv').classList.remove('on');
+    toast('Rien à résumer — enregistrement trop court ?');
     return;
   }
-  if (S.recognition) { try { S.recognition.abort(); } catch(e){} }
 
-  S.recognition = new ASR();
-  S.recognition.continuous = true;
-  S.recognition.interimResults = true;
-  S.recognition.lang = S.lang;
-  S.recognition.maxAlternatives = 1;
-
-  S.recognition.onresult = e => {
-    let fin = '', tmp = '';
-    for (let i = e.resultIndex; i < e.results.length; i++) {
-      e.results[i].isFinal ? (fin += e.results[i][0].transcript + ' ') : (tmp += e.results[i][0].transcript);
-    }
-    if (fin) S.transcript += fin;
-    const box = document.getElementById('transcriptBox');
-    box.innerHTML = esc(S.transcript) + (tmp ? `<span class="interim">${esc(tmp)}</span>` : '');
-    box.scrollTop = box.scrollHeight;
-  };
-
-  S.recognition.onerror = e => { if (e.error !== 'no-speech' && e.error !== 'aborted') console.error('ASR:', e.error); };
-  S.recognition.onend   = () => { if (S.recording) { try { S.recognition.start(); } catch(e){} } };
-
-  try { S.recognition.start(); } catch(e) {}
+  await genSummary(fullText, transcript);
 }
 
-function setBtn(cls, icon, status) {
-  const b = document.getElementById('recBtn');
-  b.className = 'rec-btn ' + cls;
-  b.textContent = icon;
-  document.getElementById('recStatus').textContent = status;
-}
-
-function tickTimer() {
-  const s = Math.floor((Date.now() - S.startTs) / 1000);
-  const m = Math.floor(s / 60);
-  document.getElementById('recTimer').textContent =
-    String(m).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
-}
-
-// ─── IMPORT FICHIER ───────────────────────
-function onImport(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (!document.getElementById('meetingName').value)
-    document.getElementById('meetingName').value = file.name.replace(/\.[^.]+$/,'');
-
-  document.getElementById('transcriptCard').classList.remove('hidden');
-  document.getElementById('transcriptBox').innerHTML = `
-    <strong>📂 Fichier importé :</strong> ${esc(file.name)}<br><br>
-    La transcription automatique de fichiers audio nécessite une connexion et une API (Whisper).<br><br>
-    <strong>Option simple :</strong> Si tu as déjà une transcription, colle-la ici :<br>
-    <textarea id="manualTA" placeholder="Colle ici la transcription du fichier…"
-      style="width:100%;margin-top:10px;padding:10px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:14px;min-height:120px;resize:vertical;outline:none"></textarea>
-    <button onclick="useManual()" style="margin-top:8px;padding:11px;background:#1d4ed8;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;width:100%;font-weight:600">
-      ✅ Générer le résumé
-    </button>`;
-  document.getElementById('summaryWrap').classList.add('hidden');
-  e.target.value = '';
-}
-
-function useManual() {
-  const t = (document.getElementById('manualTA')?.value || '').trim();
-  if (!t) { toast('Colle une transcription d\'abord'); return; }
-  S.transcript = t;
-  genSummary(t);
-}
-
-// ─── RÉSUMÉ ───────────────────────────────
-async function genSummary(text) {
+async function genSummary(text, transcript) {
   document.getElementById('loadingDiv').classList.add('on');
   document.getElementById('summaryWrap').classList.add('hidden');
 
-  const key = localStorage.getItem('cfgKey') || '';
+  if (transcript && transcript !== text) {
+    document.getElementById('transcriptCard').classList.remove('hidden');
+    document.getElementById('transcriptBox').textContent = transcript;
+  }
+
+  const mistralKey = localStorage.getItem('cfgKey') || '';
   let result;
 
-  if (key.length > 10) {
+  if (mistralKey.length > 10) {
     document.getElementById('loadingTxt').textContent = '🤖 Analyse Mistral en cours…';
-    result = await callMistral(text, key);
+    result = await callMistral(text, mistralKey);
   } else {
     document.getElementById('loadingTxt').textContent = '📝 Génération du résumé…';
-    await wait(600);
+    await wait(500);
     result = localSummary(text);
   }
 
@@ -414,7 +437,7 @@ async function callMistral(text, key) {
   const dur     = document.getElementById('recTimer').textContent || '';
 
   const prompt = `Tu es une secrétaire professionnelle expérimentée.
-Analyse cette transcription de réunion et génère un compte-rendu structuré.
+Analyse ce contenu de réunion et génère un compte-rendu structuré.
 
 Contexte :
 - Réunion : ${meeting}
@@ -439,7 +462,7 @@ PLAN D'ACTION:
 2. [Prénom/Rôle] : [action précise]
 [etc. — omets cette section s'il n'y a pas d'actions]
 
-Transcription :
+Contenu :
 ${text}`;
 
   try {
@@ -464,10 +487,10 @@ function parseMistral(raw) {
   for (const line of raw.split('\n')) {
     const t = line.trim();
     if (!t) continue;
-    if (/^RÉSUMÉ:?$/i.test(t))          { sec='r'; continue; }
-    if (/^POINTS CLÉS:?$/i.test(t))     { sec='p'; continue; }
-    if (/^DÉCISIONS PRISES:?$/i.test(t)){ sec='d'; continue; }
-    if (/^PLAN D.ACTION:?$/i.test(t))   { sec='a'; continue; }
+    if (/^RÉSUMÉ:?$/i.test(t))           { sec='r'; continue; }
+    if (/^POINTS CLÉS:?$/i.test(t))      { sec='p'; continue; }
+    if (/^DÉCISIONS PRISES:?$/i.test(t)) { sec='d'; continue; }
+    if (/^PLAN D.ACTION:?$/i.test(t))    { sec='a'; continue; }
     if (sec==='r') res.resume += (res.resume?' ':'')+t;
     if (sec==='p' && /^[•\-]/.test(t)) res.points.push(t.replace(/^[•\-]\s*/,''));
     if (sec==='d' && /^[•\-]/.test(t)) res.decisions.push(t.replace(/^[•\-]\s*/,''));
@@ -477,33 +500,27 @@ function parseMistral(raw) {
 }
 
 function localSummary(text) {
-  const sentences = text.split(/[.!?]+/).map(s=>s.trim()).filter(s=>s.length>15);
-
+  const sentences = text.split(/[.!?\n]+/).map(s=>s.trim()).filter(s=>s.length>15);
   const ACTION_WORDS = ['envoyer','faire','appeler','contacter','relancer','préparer','organiser',
     'vérifier','confirmer','prendre','établir','rédiger','transmettre','planifier','réserver',
     'signer','valider','suivre','traiter','mettre à jour','informer','rappeler',
     'send','call','prepare','check','confirm','schedule','follow up','update','review',
     'inviare','chiamare','verificare','confermare','preparare','pianificare','firmare'];
-
   const KEY_WORDS = ['budget','contrat','accord','décision','client','projet','devis','deadline',
-    'objectif','réunion','prix','tarif','délai','livraison','formation','contrat','accord',
-    'contract','meeting','project','deadline','budget','price','delivery',
-    'contratto','riunione','progetto','budget','prezzo','consegna'];
-
+    'objectif','réunion','prix','tarif','délai','livraison','formation',
+    'contract','meeting','project','budget','price','delivery',
+    'contratto','riunione','progetto','prezzo','consegna'];
   const actions = sentences.filter(s => ACTION_WORDS.some(w => s.toLowerCase().includes(w))).slice(0,5);
   const keyPts  = sentences.filter(s => KEY_WORDS.some(w => s.toLowerCase().includes(w)) && !actions.includes(s)).slice(0,4);
   const resume  = sentences.slice(0, Math.min(3, sentences.length)).join('. ').trim();
-
-  return { resume: resume + (resume.endsWith('.') ? '' : '.'), points: keyPts, decisions: [], actions };
+  return { resume: resume + (resume.endsWith('.')?'':'.'), points: keyPts, decisions: [], actions };
 }
 
 function showSummary(r, text) {
-  const name    = document.getElementById('meetingName').value || 'Réunion';
   const date    = new Date().toLocaleDateString('fr-FR', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
   const dur     = document.getElementById('recTimer').textContent || '';
   const userName= localStorage.getItem('cfgName') || '';
 
-  // Résumé
   let html = `<strong>📅 ${date}</strong>`;
   if (dur) html += `<br><strong>⏱️ Durée :</strong> ${dur}`;
   if (userName) html += `<br><strong>👤 Organisateur :</strong> ${esc(userName)}`;
@@ -518,21 +535,61 @@ function showSummary(r, text) {
   }
   document.getElementById('summaryTxt').innerHTML = html;
 
-  // Actions
   const al = document.getElementById('actionList');
-  if (r.actions.length) {
-    al.innerHTML = r.actions.map((a,i) =>
-      `<div class="action-item"><div class="action-num">${i+1}</div><div class="action-text">${esc(a)}</div></div>`
-    ).join('');
-  } else {
-    al.innerHTML = '<p style="color:#94a3b8;font-size:13px">Aucune action détectée. Ajoute une clé Mistral pour un meilleur résumé.</p>';
-  }
+  al.innerHTML = r.actions.length
+    ? r.actions.map((a,i) => `<div class="action-item"><div class="action-num">${i+1}</div><div class="action-text">${esc(a)}</div></div>`).join('')
+    : '<p style="color:#94a3b8;font-size:13px">Aucune action détectée. Configure les clés Groq + Mistral pour de meilleurs résultats.</p>';
 
   document.getElementById('summaryWrap').classList.remove('hidden');
   document.getElementById('summaryWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// ─── SAUVEGARDE ───────────────────────────
+function setBtn(cls, icon, status) {
+  const b = document.getElementById('recBtn');
+  b.className = 'rec-btn ' + cls;
+  b.textContent = icon;
+  document.getElementById('recStatus').textContent = status;
+}
+
+function tickTimer() {
+  const s = Math.floor((Date.now() - S.startTs) / 1000);
+  const m = Math.floor(s / 60);
+  document.getElementById('recTimer').textContent =
+    String(m).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
+}
+
+function onImport(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (!document.getElementById('meetingName').value)
+    document.getElementById('meetingName').value = file.name.replace(/\.[^.]+$/,'');
+
+  const groqKey = localStorage.getItem('cfgGroq') || '';
+  if (groqKey.length > 10) {
+    document.getElementById('transcriptCard').classList.add('hidden');
+    document.getElementById('summaryWrap').classList.add('hidden');
+    transcribeAndSummarize(file, '');
+  } else {
+    document.getElementById('transcriptCard').classList.remove('hidden');
+    document.getElementById('transcriptBox').innerHTML = `
+      <strong>📂 ${esc(file.name)}</strong><br><br>
+      Configure une clé Groq pour la transcription automatique,<br>ou colle le texte manuellement :<br>
+      <textarea id="manualTA" placeholder="Colle la transcription ici…"
+        style="width:100%;margin-top:10px;padding:10px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:14px;min-height:120px;resize:vertical;outline:none"></textarea>
+      <button onclick="useManual()" style="margin-top:8px;padding:11px;background:#1d4ed8;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;width:100%;font-weight:600">
+        ✅ Générer le résumé
+      </button>`;
+    document.getElementById('summaryWrap').classList.add('hidden');
+  }
+  e.target.value = '';
+}
+
+function useManual() {
+  const t = (document.getElementById('manualTA')?.value || '').trim();
+  if (!t) { toast('Colle une transcription d\'abord'); return; }
+  genSummary(t, t);
+}
+
 function saveMeeting(r, text) {
   const m = {
     id:   Date.now(),
@@ -547,7 +604,6 @@ function saveMeeting(r, text) {
   S.current = m;
 }
 
-// ─── EXPORT ───────────────────────────────
 function buildText(m) {
   m = m || S.current;
   if (!m) return '';
@@ -563,7 +619,7 @@ function buildText(m) {
     t += `RÉSUMÉ\n${'─'.repeat(30)}\n${m.r.resume}\n\n`;
     if (m.r.points.length)    { t += `POINTS CLÉS\n${'─'.repeat(30)}\n`; m.r.points.forEach(p=>t+=`• ${p}\n`); t+='\n'; }
     if (m.r.decisions.length) { t += `DÉCISIONS\n${'─'.repeat(30)}\n`; m.r.decisions.forEach(d=>t+=`• ${d}\n`); t+='\n'; }
-    if (m.r.actions.length)   { t += `PLAN D'ACTION\n${'─'.repeat(30)}\n`; m.r.actions.forEach((a,i)=>t+=`${i+1}. ${a}\n`); t+='\n'; }
+    if (m.r.actions.length)   { t += `PLAN D\'ACTION\n${'─'.repeat(30)}\n`; m.r.actions.forEach((a,i)=>t+=`${i+1}. ${a}\n`); t+='\n'; }
   }
   t += `${'─'.repeat(50)}\nTRANSCRIPTION\n${'─'.repeat(30)}\n${m.text}`;
   return t;
@@ -604,7 +660,7 @@ ul{padding-left:18px}li{margin:3px 0}
     html += `<h2>📝 Résumé</h2><p>${esc(m.r.resume)}</p>`;
     if (m.r.points.length)    { html += `<h2>📌 Points clés</h2><ul>`; m.r.points.forEach(p=>html+=`<li>${esc(p)}</li>`); html+=`</ul>`; }
     if (m.r.decisions.length) { html += `<h2>✅ Décisions</h2><ul>`; m.r.decisions.forEach(d=>html+=`<li>${esc(d)}</li>`); html+=`</ul>`; }
-    if (m.r.actions.length)   { html += `<h2>✅ Plan d'action</h2>`; m.r.actions.forEach((a,i)=>html+=`<div class="action"><b>${i+1}.</b> ${esc(a)}</div>`); }
+    if (m.r.actions.length)   { html += `<h2>✅ Plan d\'action</h2>`; m.r.actions.forEach((a,i)=>html+=`<div class="action"><b>${i+1}.</b> ${esc(a)}</div>`); }
   }
 
   html += `<h2>📋 Transcription complète</h2><div class="transcript">${esc(m.text).replace(/\n/g,'<br>')}</div></body></html>`;
@@ -620,7 +676,7 @@ function sendEmail() {
   let body = `Compte-rendu — ${m.name} — ${date}\n\n`;
   if (m.r) {
     body += `RÉSUMÉ :\n${m.r.resume}\n\n`;
-    if (m.r.actions.length) { body += `PLAN D'ACTION :\n`; m.r.actions.forEach((a,i)=>body+=`${i+1}. ${a}\n`); }
+    if (m.r.actions.length) { body += `PLAN D\'ACTION :\n`; m.r.actions.forEach((a,i)=>body+=`${i+1}. ${a}\n`); }
   }
   window.location.href = 'mailto:?subject=' + encodeURIComponent(`Compte-rendu : ${m.name} — ${date}`) + '&body=' + encodeURIComponent(body);
 }
@@ -635,7 +691,6 @@ function dl(blob, name) {
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
 
-// ─── HISTORIQUE ───────────────────────────
 function renderHist() {
   const el = document.getElementById('histList');
   if (!S.meetings.length) {
@@ -660,7 +715,6 @@ function viewMeeting(id) {
   document.getElementById('recTimer').style.display = m.dur ? 'block' : 'none';
   document.getElementById('transcriptCard').classList.remove('hidden');
   document.getElementById('transcriptBox').textContent = m.text;
-  S.transcript = m.text;
   showSummary(m.r, m.text);
   showTab('rec');
 }
@@ -673,18 +727,17 @@ function delMeeting(id) {
   toast('Supprimé');
 }
 
-// ─── PARAMÈTRES ───────────────────────────
 function openSettings()  { document.getElementById('settingsModal').classList.add('on'); }
 function closeSettings() { document.getElementById('settingsModal').classList.remove('on'); }
 function bgClose(e)      { if (e.target===document.getElementById('settingsModal')) closeSettings(); }
 function saveSettings() {
   localStorage.setItem('cfgName', document.getElementById('cfgName').value.trim());
   localStorage.setItem('cfgKey',  document.getElementById('cfgKey').value.trim());
+  localStorage.setItem('cfgGroq', document.getElementById('cfgGroq').value.trim());
   toast('Paramètres sauvegardés ✓');
   closeSettings();
 }
 
-// ─── UTILS ────────────────────────────────
 function esc(s) {
   if (!s) return '';
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -693,11 +746,10 @@ function toast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('on');
-  setTimeout(() => t.classList.remove('on'), 3000);
+  setTimeout(() => t.classList.remove('on'), 3500);
 }
 function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-// ─── SERVICE WORKER ───────────────────────
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 }
