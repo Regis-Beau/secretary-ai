@@ -1,4 +1,4 @@
-const CACHE = 'secretaire-ia-v1';
+const CACHE = 'secretaire-ia-v2';
 const FILES = ['./index.html', './manifest.json'];
 
 self.addEventListener('install', e => {
