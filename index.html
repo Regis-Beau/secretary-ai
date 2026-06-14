@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1d4ed8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Secrétaire IA">
+<title>Secrétaire IA</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.svg">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f1f5f9;color:#1e293b;min-height:100vh;overscroll-behavior:none}
+
+/* HEADER */
+.hdr{background:#1d4ed8;color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.hdr h1{font-size:19px;font-weight:700;display:flex;align-items:center;gap:8px}
+.hdr-btn{background:rgba(255,255,255,.15);border:none;color:#fff;cursor:pointer;padding:8px 12px;border-radius:8px;font-size:13px;font-weight:600}
+
+/* TABS */
+.tabs{display:flex;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:52px;z-index:99}
+.tab{flex:1;padding:13px 8px;text-align:center;cursor:pointer;font-size:13px;font-weight:600;color:#64748b;border-bottom:2px solid transparent;transition:.2s}
+.tab.on{color:#1d4ed8;border-bottom-color:#1d4ed8}
+
+/* CONTENT */
+.page{padding:16px;max-width:560px;margin:0 auto;display:none}
+.page.on{display:block}
+
+/* CARD */
+.card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:14px}
+
+/* MEETING NAME */
+.meeting-input{width:100%;padding:13px 15px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:16px;outline:none;margin-bottom:16px}
+.meeting-input:focus{border-color:#1d4ed8}
+
+/* LANG SELECTOR */
+.langs{display:flex;gap:8px;justify-content:center;margin-bottom:22px}
+.lang{padding:9px 18px;border:2px solid #e2e8f0;border-radius:20px;background:#fff;cursor:pointer;font-size:14px;font-weight:600;color:#64748b;transition:.2s}
+.lang.on{border-color:#1d4ed8;background:#eff6ff;color:#1d4ed8}
+
+/* RECORD BUTTON */
+.rec-wrap{text-align:center;margin-bottom:16px}
+.rec-btn{width:96px;height:96px;border-radius:50%;border:none;cursor:pointer;font-size:34px;transition:.3s;box-shadow:0 4px 18px rgba(0,0,0,.15);display:inline-flex;align-items:center;justify-content:center}
+.rec-btn.idle{background:linear-gradient(135deg,#ef4444,#dc2626)}
+.rec-btn.go{background:linear-gradient(135deg,#f97316,#ea580c);animation:pulse 1.4s infinite}
+.rec-btn.busy{background:linear-gradient(135deg,#8b5cf6,#7c3aed)}
+@keyframes pulse{0%,100%{box-shadow:0 4px 18px rgba(239,68,68,.35);transform:scale(1)}50%{box-shadow:0 4px 28px rgba(239,68,68,.65);transform:scale(1.06)}}
+.rec-status{font-size:13px;color:#64748b;margin-top:8px}
+.rec-timer{font-size:26px;font-weight:700;color:#1d4ed8;font-variant-numeric:tabular-nums;margin-top:4px;display:none}
+
+/* IMPORT BTN */
+.import-btn{width:100%;padding:12px;border:2px dashed #cbd5e1;border-radius:11px;background:#f8fafc;color:#64748b;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;transition:.2s}
+.import-btn:hover{border-color:#1d4ed8;color:#1d4ed8;background:#eff6ff}
+
+/* TRANSCRIPT */
+.transcript-box{font-size:14px;line-height:1.7;color:#1e293b;min-height:80px;max-height:200px;overflow-y:auto;white-space:pre-wrap}
+.interim{color:#94a3b8;font-style:italic}
+.section-title{font-size:12px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
+
+/* LOADING */
+.loading{display:none;align-items:center;gap:10px;color:#64748b;font-size:14px;margin:12px 0;padding:14px;background:#fff;border-radius:12px}
+.loading.on{display:flex}
+.spinner{width:20px;height:20px;border:2px solid #e2e8f0;border-top-color:#1d4ed8;border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* SUMMARY */
+.summary-text{font-size:15px;line-height:1.75;color:#374151;white-space:pre-wrap}
+.action-item{display:flex;align-items:flex-start;gap:11px;padding:11px 13px;background:#f0fdf4;border-radius:9px;margin-bottom:8px;border-left:3px solid #22c55e}
+.action-num{background:#22c55e;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.action-text{font-size:14px;color:#166534;line-height:1.5}
+
+/* EXPORT ROW */
+.export-row{display:flex;gap:9px;margin-top:14px}
+.exp-btn{flex:1;padding:12px 6px;border:none;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
+.exp-word{background:#1d4ed8;color:#fff}
+.exp-word:hover{background:#1e40af}
+.exp-txt{background:#f1f5f9;color:#475569}
+.exp-txt:hover{background:#e2e8f0}
+.exp-mail{background:#0ea5e9;color:#fff}
+.exp-mail:hover{background:#0284c7}
+
+/* HISTORY */
+.mtg-item{background:#fff;border-radius:12px;padding:15px;margin-bottom:9px;box-shadow:0 1px 3px rgba(0,0,0,.08);display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.mtg-item:active{transform:scale(.98)}
+.mtg-info h4{font-size:15px;font-weight:600;margin-bottom:3px}
+.mtg-info p{font-size:12px;color:#64748b}
+.mtg-del{background:none;border:none;color:#ef4444;cursor:pointer;padding:6px;font-size:18px;flex-shrink:0}
+.empty{text-align:center;padding:48px 20px;color:#94a3b8}
+.empty .em{font-size:44px;margin-bottom:10px}
+
+/* SETTINGS MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:flex-end}
+.modal-bg.on{display:flex}
+.modal{background:#fff;border-radius:20px 20px 0 0;padding:24px;width:100%;max-height:85vh;overflow-y:auto}
+.modal h2{font-size:17px;font-weight:700;margin-bottom:18px}
+.s-group{margin-bottom:18px}
+.s-label{font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;display:block}
+.s-input{width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:15px;outline:none}
+.s-input:focus{border-color:#1d4ed8}
+.s-hint{font-size:12px;color:#94a3b8;margin-top:5px;line-height:1.55}
+.s-save{background:#1d4ed8;color:#fff;border:none;border-radius:10px;padding:14px;width:100%;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:8px}
+.s-close{background:#f1f5f9;border:none;border-radius:10px;padding:13px;width:100%;font-size:15px;cursor:pointer}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:11px 18px;border-radius:10px;font-size:14px;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1}
+
+.hidden{display:none!important}
+
+/* ALERT OFFLINE */
+.offline-bar{background:#fef3c7;border-bottom:1px solid #fde68a;padding:8px 16px;font-size:13px;color:#92400e;text-align:center;display:none}
+.offline-bar.on{display:block}
+</style>
+</head>
+<body>
+
+<div class="offline-bar" id="offlineBar">📡 Hors ligne — L'enregistrement fonctionne, la transcription reprendra dès que tu seras connecté.</div>
+
+<div class="hdr">
+  <h1>🎙️ Secrétaire IA</h1>
+  <button class="hdr-btn" onclick="openSettings()">⚙️ Réglages</button>
+</div>
+
+<div class="tabs">
+  <div class="tab on" id="tab-rec" onclick="showTab('rec')">🔴 Enregistrer</div>
+  <div class="tab" id="tab-hist" onclick="showTab('hist')">📁 Historique</div>
+</div>
+
+<!-- PAGE ENREGISTREMENT -->
+<div class="page on" id="page-rec">
+
+  <div class="card">
+    <input class="meeting-input" id="meetingName" type="text" placeholder="Nom de la réunion (ex : Client Dupont)" />
+
+    <div class="langs">
+      <button class="lang on" data-lang="fr-FR" onclick="pickLang(this)">🇫🇷 FR</button>
+      <button class="lang" data-lang="en-US" onclick="pickLang(this)">🇬🇧 EN</button>
+      <button class="lang" data-lang="it-IT" onclick="pickLang(this)">🇮🇹 IT</button>
+    </div>
+
+    <div class="rec-wrap">
+      <button class="rec-btn idle" id="recBtn" onclick="toggleRec()">🎙️</button>
+      <div class="rec-status" id="recStatus">Appuie pour démarrer</div>
+      <div class="rec-timer" id="recTimer">00:00</div>
+    </div>
+
+    <button class="import-btn" onclick="document.getElementById('fileIn').click()">
+      📂 Importer un fichier audio
+    </button>
+    <input type="file" id="fileIn" accept="audio/*" style="display:none" onchange="onImport(event)">
+  </div>
+
+  <div class="card hidden" id="transcriptCard">
+    <div class="section-title">Transcription en direct</div>
+    <div class="transcript-box" id="transcriptBox"></div>
+  </div>
+
+  <div class="loading" id="loadingDiv">
+    <div class="spinner"></div>
+    <span id="loadingTxt">Génération du résumé…</span>
+  </div>
+
+  <div class="hidden" id="summaryWrap">
+    <div class="card">
+      <div class="section-title">Résumé</div>
+      <div class="summary-text" id="summaryTxt"></div>
+    </div>
+    <div class="card">
+      <div class="section-title">Plan d'action</div>
+      <div id="actionList"></div>
+    </div>
+    <div class="export-row">
+      <button class="exp-btn exp-word" onclick="exportWord()">📄 Word</button>
+      <button class="exp-btn exp-txt" onclick="exportTxt()">📋 Texte</button>
+      <button class="exp-btn exp-mail" onclick="sendEmail()">📧 Email</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- PAGE HISTORIQUE -->
+<div class="page" id="page-hist">
+  <div id="histList"></div>
+</div>
+
+<!-- MODAL PARAMÈTRES -->
+<div class="modal-bg" id="settingsModal" onclick="bgClose(event)">
+  <div class="modal">
+    <h2>⚙️ Paramètres</h2>
+
+    <div class="s-group">
+      <label class="s-label">Ton prénom (pour les comptes-rendus)</label>
+      <input class="s-input" id="cfgName" type="text" placeholder="Ex : Régis" />
+    </div>
+
+    <div class="s-group">
+      <label class="s-label">Clé API Mistral <span style="font-weight:400;text-transform:none">(résumés IA)</span></label>
+      <input class="s-input" id="cfgKey" type="password" placeholder="sk-..." autocomplete="off" />
+      <p class="s-hint">
+        Sans clé : résumé automatique basique.<br>
+        Avec clé Mistral : résumé IA de qualité professionnelle.<br>
+        ➜ Gratuit sur <strong>console.mistral.ai</strong> → <em>API keys</em> → <em>Create key</em>
+      </p>
+    </div>
+
+    <button class="s-save" onclick="saveSettings()">💾 Enregistrer</button>
+    <button class="s-close" onclick="closeSettings()">Fermer</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── ÉTAT ─────────────────────────────────
+const S = {
+  recording: false,
+  transcript: '',
+  lang: 'fr-FR',
+  recognition: null,
+  mediaRecorder: null,
+  chunks: [],
+  startTs: 0,
+  timerID: null,
+  meetings: [],
+  current: null
+};
+
+// ─── INIT ─────────────────────────────────
+function init() {
+  S.meetings = JSON.parse(localStorage.getItem('meetings') || '[]');
+  document.getElementById('cfgName').value = localStorage.getItem('cfgName') || '';
+  document.getElementById('cfgKey').value = localStorage.getItem('cfgKey') || '';
+  renderHist();
+
+  window.addEventListener('online',  () => document.getElementById('offlineBar').classList.remove('on'));
+  window.addEventListener('offline', () => document.getElementById('offlineBar').classList.add('on'));
+  if (!navigator.onLine) document.getElementById('offlineBar').classList.add('on');
+}
+
+// ─── TABS ─────────────────────────────────
+function showTab(id) {
+  ['rec','hist'].forEach(t => {
+    document.getElementById('tab-'+t).classList.toggle('on', t === id);
+    document.getElementById('page-'+t).classList.toggle('on', t === id);
+  });
+  if (id === 'hist') renderHist();
+}
+
+// ─── LANGUE ───────────────────────────────
+function pickLang(btn) {
+  document.querySelectorAll('.lang').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  S.lang = btn.dataset.lang;
+}
+
+// ─── ENREGISTREMENT ───────────────────────
+async function toggleRec() {
+  S.recording ? stopRec() : await startRec();
+}
+
+async function startRec() {
+  S.transcript = '';
+  S.chunks = [];
+
+  setBtn('go', '⏹️', 'Enregistrement en cours… (appuie pour arrêter)');
+  document.getElementById('recTimer').style.display = 'block';
+  document.getElementById('transcriptCard').classList.remove('hidden');
+  document.getElementById('transcriptBox').innerHTML = '';
+  document.getElementById('summaryWrap').classList.add('hidden');
+  document.getElementById('loadingDiv').classList.remove('on');
+
+  // Timer
+  S.startTs = Date.now();
+  S.timerID = setInterval(tickTimer, 1000);
+
+  // Reconnaissance vocale
+  startASR();
+
+  // Enregistrement audio (sauvegarde locale)
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    S.mediaRecorder = new MediaRecorder(stream, { mimeType: MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4' });
+    S.mediaRecorder.ondataavailable = e => { if (e.data.size > 0) S.chunks.push(e.data); };
+    S.mediaRecorder.start(1000);
+  } catch(e) {
+    toast('Micro non autorisé — Active-le dans Chrome');
+    stopRec(); return;
+  }
+
+  S.recording = true;
+}
+
+function stopRec() {
+  S.recording = false;
+  clearInterval(S.timerID);
+
+  if (S.recognition) { try { S.recognition.stop(); } catch(e){} }
+  if (S.mediaRecorder && S.mediaRecorder.state !== 'inactive') {
+    S.mediaRecorder.stop();
+    S.mediaRecorder.stream.getTracks().forEach(t => t.stop());
+  }
+
+  setBtn('idle', '🎙️', 'Appuie pour démarrer');
+
+  if (S.transcript.trim().length > 20) {
+    genSummary(S.transcript);
+  } else {
+    toast('Transcription trop courte. Vérifie le micro.');
+  }
+}
+
+function startASR() {
+  const ASR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!ASR) {
+    document.getElementById('transcriptBox').textContent = '⚠️ Transcription en direct non disponible sur ce navigateur. Utilise Chrome. L\'audio sera sauvegardé.';
+    return;
+  }
+  if (S.recognition) { try { S.recognition.abort(); } catch(e){} }
+
+  S.recognition = new ASR();
+  S.recognition.continuous = true;
+  S.recognition.interimResults = true;
+  S.recognition.lang = S.lang;
+  S.recognition.maxAlternatives = 1;
+
+  S.recognition.onresult = e => {
+    let fin = '', tmp = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      e.results[i].isFinal ? (fin += e.results[i][0].transcript + ' ') : (tmp += e.results[i][0].transcript);
+    }
+    if (fin) S.transcript += fin;
+    const box = document.getElementById('transcriptBox');
+    box.innerHTML = esc(S.transcript) + (tmp ? `<span class="interim">${esc(tmp)}</span>` : '');
+    box.scrollTop = box.scrollHeight;
+  };
+
+  S.recognition.onerror = e => { if (e.error !== 'no-speech' && e.error !== 'aborted') console.error('ASR:', e.error); };
+  S.recognition.onend   = () => { if (S.recording) { try { S.recognition.start(); } catch(e){} } };
+
+  try { S.recognition.start(); } catch(e) {}
+}
+
+function setBtn(cls, icon, status) {
+  const b = document.getElementById('recBtn');
+  b.className = 'rec-btn ' + cls;
+  b.textContent = icon;
+  document.getElementById('recStatus').textContent = status;
+}
+
+function tickTimer() {
+  const s = Math.floor((Date.now() - S.startTs) / 1000);
+  const m = Math.floor(s / 60);
+  document.getElementById('recTimer').textContent =
+    String(m).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
+}
+
+// ─── IMPORT FICHIER ───────────────────────
+function onImport(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (!document.getElementById('meetingName').value)
+    document.getElementById('meetingName').value = file.name.replace(/\.[^.]+$/,'');
+
+  document.getElementById('transcriptCard').classList.remove('hidden');
+  document.getElementById('transcriptBox').innerHTML = `
+    <strong>📂 Fichier importé :</strong> ${esc(file.name)}<br><br>
+    La transcription automatique de fichiers audio nécessite une connexion et une API (Whisper).<br><br>
+    <strong>Option simple :</strong> Si tu as déjà une transcription, colle-la ici :<br>
+    <textarea id="manualTA" placeholder="Colle ici la transcription du fichier…"
+      style="width:100%;margin-top:10px;padding:10px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:14px;min-height:120px;resize:vertical;outline:none"></textarea>
+    <button onclick="useManual()" style="margin-top:8px;padding:11px;background:#1d4ed8;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;width:100%;font-weight:600">
+      ✅ Générer le résumé
+    </button>`;
+  document.getElementById('summaryWrap').classList.add('hidden');
+  e.target.value = '';
+}
+
+function useManual() {
+  const t = (document.getElementById('manualTA')?.value || '').trim();
+  if (!t) { toast('Colle une transcription d\'abord'); return; }
+  S.transcript = t;
+  genSummary(t);
+}
+
+// ─── RÉSUMÉ ───────────────────────────────
+async function genSummary(text) {
+  document.getElementById('loadingDiv').classList.add('on');
+  document.getElementById('summaryWrap').classList.add('hidden');
+
+  const key = localStorage.getItem('cfgKey') || '';
+  let result;
+
+  if (key.length > 10) {
+    document.getElementById('loadingTxt').textContent = '🤖 Analyse Mistral en cours…';
+    result = await callMistral(text, key);
+  } else {
+    document.getElementById('loadingTxt').textContent = '📝 Génération du résumé…';
+    await wait(600);
+    result = localSummary(text);
+  }
+
+  document.getElementById('loadingDiv').classList.remove('on');
+  showSummary(result, text);
+  saveMeeting(result, text);
+}
+
+async function callMistral(text, key) {
+  const name    = localStorage.getItem('cfgName') || 'Organisateur';
+  const meeting = document.getElementById('meetingName').value || 'Réunion';
+  const date    = new Date().toLocaleDateString('fr-FR');
+  const dur     = document.getElementById('recTimer').textContent || '';
+
+  const prompt = `Tu es une secrétaire professionnelle expérimentée.
+Analyse cette transcription de réunion et génère un compte-rendu structuré.
+
+Contexte :
+- Réunion : ${meeting}
+- Date : ${date}${dur ? '\n- Durée : ' + dur : ''}
+- Organisateur : ${name}
+
+Réponds EXACTEMENT dans ce format (conserve les titres en majuscules) :
+
+RÉSUMÉ:
+[2 à 4 phrases résumant l'essentiel : contexte, objectifs, décisions]
+
+POINTS CLÉS:
+• [point 1]
+• [point 2]
+• [etc.]
+
+DÉCISIONS PRISES:
+• [décision 1 — écris "Aucune décision formelle" s'il n'y en a pas]
+
+PLAN D'ACTION:
+1. [Prénom/Rôle] : [action précise]
+2. [Prénom/Rôle] : [action précise]
+[etc. — omets cette section s'il n'y a pas d'actions]
+
+Transcription :
+${text}`;
+
+  try {
+    const r = await fetch('https://api.mistral.ai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+      body: JSON.stringify({ model: 'mistral-small-latest', messages: [{ role: 'user', content: prompt }], max_tokens: 1200, temperature: 0.25 })
+    });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const d = await r.json();
+    return parseMistral(d.choices[0].message.content);
+  } catch(e) {
+    console.error('Mistral:', e);
+    toast('Erreur API Mistral — résumé basique utilisé');
+    return localSummary(text);
+  }
+}
+
+function parseMistral(raw) {
+  const res = { resume:'', points:[], decisions:[], actions:[] };
+  let sec = '';
+  for (const line of raw.split('\n')) {
+    const t = line.trim();
+    if (!t) continue;
+    if (/^RÉSUMÉ:?$/i.test(t))          { sec='r'; continue; }
+    if (/^POINTS CLÉS:?$/i.test(t))     { sec='p'; continue; }
+    if (/^DÉCISIONS PRISES:?$/i.test(t)){ sec='d'; continue; }
+    if (/^PLAN D.ACTION:?$/i.test(t))   { sec='a'; continue; }
+    if (sec==='r') res.resume += (res.resume?' ':'')+t;
+    if (sec==='p' && /^[•\-]/.test(t)) res.points.push(t.replace(/^[•\-]\s*/,''));
+    if (sec==='d' && /^[•\-]/.test(t)) res.decisions.push(t.replace(/^[•\-]\s*/,''));
+    if (sec==='a') { const m=t.match(/^(\d+)\.\s*(.+)/); if(m) res.actions.push(m[2]); }
+  }
+  return res;
+}
+
+function localSummary(text) {
+  const sentences = text.split(/[.!?]+/).map(s=>s.trim()).filter(s=>s.length>15);
+
+  const ACTION_WORDS = ['envoyer','faire','appeler','contacter','relancer','préparer','organiser',
+    'vérifier','confirmer','prendre','établir','rédiger','transmettre','planifier','réserver',
+    'signer','valider','suivre','traiter','mettre à jour','informer','rappeler',
+    'send','call','prepare','check','confirm','schedule','follow up','update','review',
+    'inviare','chiamare','verificare','confermare','preparare','pianificare','firmare'];
+
+  const KEY_WORDS = ['budget','contrat','accord','décision','client','projet','devis','deadline',
+    'objectif','réunion','prix','tarif','délai','livraison','formation','contrat','accord',
+    'contract','meeting','project','deadline','budget','price','delivery',
+    'contratto','riunione','progetto','budget','prezzo','consegna'];
+
+  const actions = sentences.filter(s => ACTION_WORDS.some(w => s.toLowerCase().includes(w))).slice(0,5);
+  const keyPts  = sentences.filter(s => KEY_WORDS.some(w => s.toLowerCase().includes(w)) && !actions.includes(s)).slice(0,4);
+  const resume  = sentences.slice(0, Math.min(3, sentences.length)).join('. ').trim();
+
+  return { resume: resume + (resume.endsWith('.') ? '' : '.'), points: keyPts, decisions: [], actions };
+}
+
+function showSummary(r, text) {
+  const name    = document.getElementById('meetingName').value || 'Réunion';
+  const date    = new Date().toLocaleDateString('fr-FR', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const dur     = document.getElementById('recTimer').textContent || '';
+  const userName= localStorage.getItem('cfgName') || '';
+
+  // Résumé
+  let html = `<strong>📅 ${date}</strong>`;
+  if (dur) html += `<br><strong>⏱️ Durée :</strong> ${dur}`;
+  if (userName) html += `<br><strong>👤 Organisateur :</strong> ${esc(userName)}`;
+  html += `<br><br>${esc(r.resume)}`;
+  if (r.points.length) {
+    html += `<br><br><strong>Points clés :</strong><br>`;
+    r.points.forEach(p => html += `• ${esc(p)}<br>`);
+  }
+  if (r.decisions.length && r.decisions[0].toLowerCase() !== 'aucune décision formelle') {
+    html += `<br><strong>Décisions :</strong><br>`;
+    r.decisions.forEach(d => html += `• ${esc(d)}<br>`);
+  }
+  document.getElementById('summaryTxt').innerHTML = html;
+
+  // Actions
+  const al = document.getElementById('actionList');
+  if (r.actions.length) {
+    al.innerHTML = r.actions.map((a,i) =>
+      `<div class="action-item"><div class="action-num">${i+1}</div><div class="action-text">${esc(a)}</div></div>`
+    ).join('');
+  } else {
+    al.innerHTML = '<p style="color:#94a3b8;font-size:13px">Aucune action détectée. Ajoute une clé Mistral pour un meilleur résumé.</p>';
+  }
+
+  document.getElementById('summaryWrap').classList.remove('hidden');
+  document.getElementById('summaryWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ─── SAUVEGARDE ───────────────────────────
+function saveMeeting(r, text) {
+  const m = {
+    id:   Date.now(),
+    name: document.getElementById('meetingName').value || 'Réunion',
+    date: new Date().toISOString(),
+    dur:  document.getElementById('recTimer').textContent || '',
+    text, r
+  };
+  S.meetings.unshift(m);
+  if (S.meetings.length > 100) S.meetings.pop();
+  localStorage.setItem('meetings', JSON.stringify(S.meetings));
+  S.current = m;
+}
+
+// ─── EXPORT ───────────────────────────────
+function buildText(m) {
+  m = m || S.current;
+  if (!m) return '';
+  const date = new Date(m.date).toLocaleDateString('fr-FR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const user = localStorage.getItem('cfgName') || '';
+  let t = 'COMPTE-RENDU DE RÉUNION\n' + '='.repeat(50) + '\n\n';
+  t += `Réunion   : ${m.name}\n`;
+  t += `Date      : ${date}\n`;
+  if (m.dur) t += `Durée     : ${m.dur}\n`;
+  if (user)  t += `Organisateur : ${user}\n`;
+  t += '\n' + '─'.repeat(50) + '\n\n';
+  if (m.r) {
+    t += `RÉSUMÉ\n${'─'.repeat(30)}\n${m.r.resume}\n\n`;
+    if (m.r.points.length)    { t += `POINTS CLÉS\n${'─'.repeat(30)}\n`; m.r.points.forEach(p=>t+=`• ${p}\n`); t+='\n'; }
+    if (m.r.decisions.length) { t += `DÉCISIONS\n${'─'.repeat(30)}\n`; m.r.decisions.forEach(d=>t+=`• ${d}\n`); t+='\n'; }
+    if (m.r.actions.length)   { t += `PLAN D'ACTION\n${'─'.repeat(30)}\n`; m.r.actions.forEach((a,i)=>t+=`${i+1}. ${a}\n`); t+='\n'; }
+  }
+  t += `${'─'.repeat(50)}\nTRANSCRIPTION\n${'─'.repeat(30)}\n${m.text}`;
+  return t;
+}
+
+function exportTxt() {
+  const t = buildText();
+  if (!t) { toast('Aucun résumé disponible'); return; }
+  const fname = (S.current?.name||'reunion').replace(/[^a-z0-9]/gi,'_') + '_' + new Date().toISOString().split('T')[0] + '.txt';
+  dl(new Blob([t],{type:'text/plain;charset=utf-8'}), fname);
+  toast('Fichier texte téléchargé ✓');
+}
+
+function exportWord() {
+  const m = S.current;
+  if (!m) { toast('Aucun résumé disponible'); return; }
+  const date = new Date(m.date).toLocaleDateString('fr-FR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const user = localStorage.getItem('cfgName') || '';
+
+  let html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
+<style>body{font-family:Calibri,Arial,sans-serif;margin:2.5cm;color:#111;font-size:11pt}
+h1{color:#1d4ed8;font-size:18pt;border-bottom:2px solid #1d4ed8;padding-bottom:6px;margin-bottom:14px}
+h2{color:#374151;font-size:13pt;margin-top:18px;margin-bottom:6px}
+.meta{background:#f8fafc;padding:12px;border-radius:4px;margin-bottom:18px;font-size:10pt;color:#475569}
+.meta p{margin:3px 0}
+.action{background:#f0fdf4;border-left:3px solid #22c55e;padding:7px 11px;margin:5px 0;font-size:10pt;color:#166534}
+ul{padding-left:18px}li{margin:3px 0}
+.transcript{background:#f8fafc;padding:14px;font-size:9pt;color:#64748b;line-height:1.7;margin-top:10px}
+</style></head><body>
+<h1>🎙️ ${esc(m.name)}</h1>
+<div class="meta">
+  <p>📅 <b>Date :</b> ${date}</p>
+  ${m.dur?`<p>⏱️ <b>Durée :</b> ${m.dur}</p>`:''}
+  ${user?`<p>👤 <b>Organisateur :</b> ${esc(user)}</p>`:''}
+</div>`;
+
+  if (m.r) {
+    html += `<h2>📝 Résumé</h2><p>${esc(m.r.resume)}</p>`;
+    if (m.r.points.length)    { html += `<h2>📌 Points clés</h2><ul>`; m.r.points.forEach(p=>html+=`<li>${esc(p)}</li>`); html+=`</ul>`; }
+    if (m.r.decisions.length) { html += `<h2>✅ Décisions</h2><ul>`; m.r.decisions.forEach(d=>html+=`<li>${esc(d)}</li>`); html+=`</ul>`; }
+    if (m.r.actions.length)   { html += `<h2>✅ Plan d'action</h2>`; m.r.actions.forEach((a,i)=>html+=`<div class="action"><b>${i+1}.</b> ${esc(a)}</div>`); }
+  }
+
+  html += `<h2>📋 Transcription complète</h2><div class="transcript">${esc(m.text).replace(/\n/g,'<br>')}</div></body></html>`;
+  const fname = (m.name||'reunion').replace(/[^a-z0-9]/gi,'_') + '_' + new Date().toISOString().split('T')[0] + '.doc';
+  dl(new Blob([html],{type:'application/msword'}), fname);
+  toast('Fichier Word téléchargé ✓');
+}
+
+function sendEmail() {
+  const m = S.current;
+  if (!m) { toast('Aucun résumé disponible'); return; }
+  const date = new Date(m.date).toLocaleDateString('fr-FR');
+  let body = `Compte-rendu — ${m.name} — ${date}\n\n`;
+  if (m.r) {
+    body += `RÉSUMÉ :\n${m.r.resume}\n\n`;
+    if (m.r.actions.length) { body += `PLAN D'ACTION :\n`; m.r.actions.forEach((a,i)=>body+=`${i+1}. ${a}\n`); }
+  }
+  window.location.href = 'mailto:?subject=' + encodeURIComponent(`Compte-rendu : ${m.name} — ${date}`) + '&body=' + encodeURIComponent(body);
+}
+
+function dl(blob, name) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+// ─── HISTORIQUE ───────────────────────────
+function renderHist() {
+  const el = document.getElementById('histList');
+  if (!S.meetings.length) {
+    el.innerHTML = '<div class="empty"><div class="em">📁</div><p>Aucune réunion enregistrée</p><p style="margin-top:6px;font-size:12px">Tes comptes-rendus apparaîtront ici</p></div>';
+    return;
+  }
+  el.innerHTML = S.meetings.map(m => {
+    const d = new Date(m.date).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'});
+    return `<div class="mtg-item" onclick="viewMeeting(${m.id})">
+      <div class="mtg-info"><h4>${esc(m.name)}</h4><p>📅 ${d}${m.dur?' · ⏱️ '+m.dur:''}</p></div>
+      <button class="mtg-del" onclick="event.stopPropagation();delMeeting(${m.id})">🗑️</button>
+    </div>`;
+  }).join('');
+}
+
+function viewMeeting(id) {
+  const m = S.meetings.find(x=>x.id===id);
+  if (!m) return;
+  S.current = m;
+  document.getElementById('meetingName').value = m.name;
+  document.getElementById('recTimer').textContent = m.dur || '';
+  document.getElementById('recTimer').style.display = m.dur ? 'block' : 'none';
+  document.getElementById('transcriptCard').classList.remove('hidden');
+  document.getElementById('transcriptBox').textContent = m.text;
+  S.transcript = m.text;
+  showSummary(m.r, m.text);
+  showTab('rec');
+}
+
+function delMeeting(id) {
+  if (!confirm('Supprimer cette réunion ?')) return;
+  S.meetings = S.meetings.filter(x=>x.id!==id);
+  localStorage.setItem('meetings', JSON.stringify(S.meetings));
+  renderHist();
+  toast('Supprimé');
+}
+
+// ─── PARAMÈTRES ───────────────────────────
+function openSettings()  { document.getElementById('settingsModal').classList.add('on'); }
+function closeSettings() { document.getElementById('settingsModal').classList.remove('on'); }
+function bgClose(e)      { if (e.target===document.getElementById('settingsModal')) closeSettings(); }
+function saveSettings() {
+  localStorage.setItem('cfgName', document.getElementById('cfgName').value.trim());
+  localStorage.setItem('cfgKey',  document.getElementById('cfgKey').value.trim());
+  toast('Paramètres sauvegardés ✓');
+  closeSettings();
+}
+
+// ─── UTILS ────────────────────────────────
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  setTimeout(() => t.classList.remove('on'), 3000);
+}
+function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ─── SERVICE WORKER ───────────────────────
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+
+init();
+</script>
+</body>
+</html>
